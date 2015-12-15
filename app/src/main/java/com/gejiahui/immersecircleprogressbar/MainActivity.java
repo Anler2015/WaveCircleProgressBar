@@ -34,6 +34,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ib = (ImmerseCircleProgressBar)findViewById(R.id.ib);
+        ib.setProgress(0);
         btn = (Button)findViewById(R.id.btn);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -79,7 +79,7 @@ public class ImmerseCircleProgressBar extends ProgressBar {
         mWidth = getWidth();
         mHeight = getHeight();
         Log.v("gjh",mWidth+":"+mHeight);
-        mControlX = -mWidth;
+        mControlX = 0;
         mControlY = 100;
     }
 
@@ -101,21 +101,17 @@ public class ImmerseCircleProgressBar extends ProgressBar {
 
         mPath.reset();
         mPath.moveTo(mWidth + mWidth / 4, mHeight);
-        mPath.lineTo(-mWidth / 4, mHeight);
+        mPath.lineTo(-mWidth , mHeight);
    //     mPath.lineTo(-mWidth / 4, mHeight - mHeight * getProgress() / getMax());
    //     mPath.cubicTo(mControlX,mControlY+mHeight - mHeight * getProgress() / getMax(),mControlX+mWidth/4,-mControlY+mHeight - mHeight * getProgress() / getMax(),mWidth + mWidth / 4,mHeight - mHeight * getProgress() / getMax());
      //   mPath.quadTo(mControlX,mControlY+mHeight - mHeight * getProgress() / getMax(),mWidth + mWidth / 4,mHeight - mHeight * getProgress() / getMax());
-        mPath.lineTo( mControlX-80, mHeight);
-        mPath.lineTo( mControlX-80, mHeight - mHeight * getProgress() / getMax());
+   //     mPath.lineTo( mControlX-400, mHeight);
+        mPath.lineTo( mControlX-mWidth , mHeight+10 - (mHeight+20) * getProgress() / getMax());
         int x = mWidth/10;
         for(int i=0;i<10;i++){
-            mPath.rQuadTo(x/2, 15,x, 0);
-            mPath.rQuadTo(x/2, -15,x, 0);
+            mPath.rQuadTo(x/2, 10,x, 0);
+            mPath.rQuadTo(x/2, -10,x, 0);
         }
-//        int x = mWidth/2;
-//        for(int i=0 ;i<=3;i++){
-//           mPath.rQuadTo();
-//        }
 
 
         mPath.close();
@@ -123,17 +119,21 @@ public class ImmerseCircleProgressBar extends ProgressBar {
         mBitmapCanvas.drawText(mText, textXPosition, textYPosition, mTextPaint);
         canvas.drawBitmap(waveBitmap,0,0,null);
 
-        boolean b = false;
-        if(mControlX > mWidth + mWidth / 4){
-            b =true;
+//        boolean b = false;
+//        if(mControlX > mWidth + mWidth / 4){
+//            b =true;
+//        }
+//
+//        if(mControlX < -mWidth / 4)
+//        {
+//            b = false;
+//        }
+//        mControlX = b ? mControlX -20 :mControlX+20;
+        if(mControlX<mWidth){
+            mControlX+=20;
+        }else {
+            mControlX = 0;
         }
-
-        if(mControlX < -mWidth / 4)
-        {
-            b = false;
-        }
-        mControlX = b ? mControlX -20 :mControlX+20;
-
 
     }
 
