@@ -7,6 +7,8 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -15,22 +17,87 @@ import android.widget.ProgressBar;
  * Created by gejiahui on 2015/12/15.
  */
 public class WaveCircleProgressBar extends ProgressBar {
+    /**
+     * used to draw the wave
+     */
     private Paint mPathPaint;
+    /**
+     * used to draw the circle
+     */
     private Paint mCirclePaint;
+    /**
+     * used to draw the text on the mBackBitmap
+     */
     private TextPaint mBeforeTextPaint;
+    /**
+     * used to draw the text on the mFrontBitmap
+     */
     private TextPaint mAfterTextPaint;
+    /**
+     * used to draw the mFrontBitmap on the mBackBitmap
+     */
     private Paint mBitmapPaint;
+    /**
+     * used to clear the bitmap
+     */
     private Paint mClearPaint;
+    /**
+     * draw wave line
+     */
     private Path mPath;
+    /**
+     * circle's radius
+     */
     private int mRadius = (200);
+    /**
+     * bitmap on the front
+     */
     private Bitmap mFrontBitmap;
+    /**
+     * bitmap on the background
+     */
     private Bitmap mBackBitmap;
+    /**
+     * used to draw on the mFrontBitmap
+     */
     private Canvas mFrontCanvas;
+    /**
+     * used to draw on the mBackBitmap
+     */
     private Canvas mBackCanvas;
+    /**
+     * view's width
+     */
     int mWidth;
+    /**
+     * view's height
+     */
     int mHeight;
+    /**
+     * the point to control the wave
+     */
     int mControlX ,mControlY;
+    /**
+     * text on the center of the circle
+     */
     String mText = "";
+    /**
+     * used to update the data to make wave more vivid
+     */
+    Handler updateHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+
+            if(mControlX<mWidth){
+                mControlX+=15;
+            }else {
+                mControlX = 0;
+            }
+
+            invalidate();
+            updateHandler.sendEmptyMessageDelayed(0, 100);
+        }
+    };
     public WaveCircleProgressBar(Context context) {
         this(context, null );
     }
@@ -63,7 +130,7 @@ public class WaveCircleProgressBar extends ProgressBar {
         mClearPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
 
         mPath = new Path();
-        
+        updateHandler.sendEmptyMessageDelayed(0,100);
     }
 
 
@@ -108,6 +175,7 @@ public class WaveCircleProgressBar extends ProgressBar {
 
     @Override
     protected synchronized void onDraw(Canvas canvas) {
+        //clear two canvas
         mFrontCanvas.drawPaint(mClearPaint);
         mBackCanvas.drawPaint(mClearPaint);
 
@@ -115,10 +183,12 @@ public class WaveCircleProgressBar extends ProgressBar {
         float textXPosition = mRadius - mBeforeTextPaint.measureText(mText)/2;
         float textYPosition = mRadius - (mBeforeTextPaint.descent()+mBeforeTextPaint.ascent())/2;
 
+        //draw a circle and progress on the  mFrontCanvas
         mFrontCanvas.translate(getPaddingLeft(), getPaddingTop());
         mFrontCanvas.drawCircle(mRadius + mCirclePaint.getStrokeWidth(), mRadius + mCirclePaint.getStrokeWidth(), mRadius, mCirclePaint);
         mFrontCanvas.drawText(mText, textXPosition, textYPosition, mBeforeTextPaint);
 
+        // use path to draw wave and  text in different color  on mBackCanvas
         mPath.reset();
         mPath.moveTo(mWidth + mWidth / 4, mHeight);
         mPath.lineTo(-mWidth , mHeight);
@@ -132,23 +202,18 @@ public class WaveCircleProgressBar extends ProgressBar {
         mBackCanvas.drawPath(mPath, mPathPaint);
         mBackCanvas.drawText(mText, textXPosition, textYPosition, mAfterTextPaint);
 
+
         mFrontCanvas.drawBitmap(mBackBitmap,0,0,mBitmapPaint);
-
-        canvas.drawBitmap(mFrontBitmap,0,0,null);
-
-
-
-        if(mControlX<mWidth){
-            mControlX+=15;
-        }else {
-            mControlX = 0;
-        }
+        canvas.drawBitmap(mFrontBitmap, 0, 0, null);
 
     }
 
 
-
-
+    @Override
+    public synchronized void setProgress(int progress) {
+        invalidate();
+        super.setProgress(progress);
+    }
 }
 
 
