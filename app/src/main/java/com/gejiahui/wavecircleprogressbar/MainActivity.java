@@ -1,21 +1,17 @@
-package com.gejiahui.immersecircleprogressbar;
+package com.gejiahui.wavecircleprogressbar;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.Button;
+
+import com.gejiahui.immersecircleprogressbar.R;
 
 public class MainActivity extends Activity {
 
-    ImmerseCircleProgressBar ib;
+    WaveCircleProgressBar ib;
     Button btn ;
     int i = 0;
     Handler handler = new Handler(){
@@ -33,7 +29,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ib = (ImmerseCircleProgressBar)findViewById(R.id.ib);
+        ib = (WaveCircleProgressBar)findViewById(R.id.ib);
         ib.setProgress(0);
         btn = (Button)findViewById(R.id.btn);
         btn.setOnClickListener(new View.OnClickListener() {

@@ -1,4 +1,4 @@
-package com.gejiahui.immersecircleprogressbar;
+package com.gejiahui.wavecircleprogressbar;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -14,39 +14,56 @@ import android.widget.ProgressBar;
 /**
  * Created by gejiahui on 2015/12/15.
  */
-public class ImmerseCircleProgressBar extends ProgressBar {
+public class WaveCircleProgressBar extends ProgressBar {
     private Paint mPathPaint;
     private Paint mCirclePaint;
-    private TextPaint mTextPaint;
+    private TextPaint mBeforeTextPaint;
+    private TextPaint mAfterTextPaint;
+    private Paint mBitmapPaint;
+    private Paint mClearPaint;
     private Path mPath;
     private int mRadius = (200);
-    private Bitmap waveBitmap;
+    private Bitmap mFrontBitmap;
+    private Bitmap mBackBitmap;
+    private Canvas mFrontCanvas;
+    private Canvas mBackCanvas;
     int mWidth;
     int mHeight;
     int mControlX ,mControlY;
     String mText = "";
-    public ImmerseCircleProgressBar(Context context) {
+    public WaveCircleProgressBar(Context context) {
         this(context, null );
     }
 
-    public ImmerseCircleProgressBar(Context context, AttributeSet attrs) {
+    public WaveCircleProgressBar(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public ImmerseCircleProgressBar(Context context, AttributeSet attrs, int defStyleAttr) {
+    public WaveCircleProgressBar(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        mTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
-        mTextPaint.setTextSize(50);
+        mBeforeTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
+        mBeforeTextPaint.setTextSize(50);
+
+        mAfterTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
+        mAfterTextPaint.setTextSize(50);
+        mAfterTextPaint.setColor(Color.WHITE);
+        mAfterTextPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
 
         mCirclePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mCirclePaint.setColor(Color.RED);
 
-
         mPathPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPathPaint.setColor(Color.BLUE);
-        mPathPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+
+        mBitmapPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mBitmapPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP));
+
+        mClearPaint = new Paint();
+        mClearPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+
         mPath = new Path();
+        
     }
 
 
@@ -81,56 +98,48 @@ public class ImmerseCircleProgressBar extends ProgressBar {
         Log.v("gjh",mWidth+":"+mHeight);
         mControlX = 0;
         mControlY = 100;
+
+        mFrontBitmap = Bitmap.createBitmap(mWidth, mHeight, Bitmap.Config.ARGB_8888);
+        mBackBitmap = Bitmap.createBitmap(mWidth, mHeight, Bitmap.Config.ARGB_8888);
+        mFrontCanvas = new Canvas(mFrontBitmap);
+        mBackCanvas = new Canvas(mBackBitmap);
+
     }
 
     @Override
     protected synchronized void onDraw(Canvas canvas) {
-
+        mFrontCanvas.drawPaint(mClearPaint);
+        mBackCanvas.drawPaint(mClearPaint);
 
         mText = getProgress()+"%";
-        float textXPosition = mRadius - mTextPaint.measureText(mText)/2;
-        float textYPosition = mRadius - (mTextPaint.descent()+mTextPaint.ascent())/2;
-        if(waveBitmap == null){
-            waveBitmap = Bitmap.createBitmap(mWidth, mHeight, Bitmap.Config.ARGB_8888);
-        }
-        Canvas mBitmapCanvas = new Canvas(waveBitmap);
+        float textXPosition = mRadius - mBeforeTextPaint.measureText(mText)/2;
+        float textYPosition = mRadius - (mBeforeTextPaint.descent()+mBeforeTextPaint.ascent())/2;
 
-        mBitmapCanvas.translate(getPaddingLeft(), getPaddingTop());
-        mBitmapCanvas.drawCircle(mRadius + mCirclePaint.getStrokeWidth(), mRadius + mCirclePaint.getStrokeWidth(), mRadius, mCirclePaint);
-
+        mFrontCanvas.translate(getPaddingLeft(), getPaddingTop());
+        mFrontCanvas.drawCircle(mRadius + mCirclePaint.getStrokeWidth(), mRadius + mCirclePaint.getStrokeWidth(), mRadius, mCirclePaint);
+        mFrontCanvas.drawText(mText, textXPosition, textYPosition, mBeforeTextPaint);
 
         mPath.reset();
         mPath.moveTo(mWidth + mWidth / 4, mHeight);
         mPath.lineTo(-mWidth , mHeight);
-   //     mPath.lineTo(-mWidth / 4, mHeight - mHeight * getProgress() / getMax());
-   //     mPath.cubicTo(mControlX,mControlY+mHeight - mHeight * getProgress() / getMax(),mControlX+mWidth/4,-mControlY+mHeight - mHeight * getProgress() / getMax(),mWidth + mWidth / 4,mHeight - mHeight * getProgress() / getMax());
-     //   mPath.quadTo(mControlX,mControlY+mHeight - mHeight * getProgress() / getMax(),mWidth + mWidth / 4,mHeight - mHeight * getProgress() / getMax());
-   //     mPath.lineTo( mControlX-400, mHeight);
         mPath.lineTo( mControlX-mWidth , mHeight+10 - (mHeight+20) * getProgress() / getMax());
         int x = mWidth/10;
         for(int i=0;i<10;i++){
             mPath.rQuadTo(x/2, 10,x, 0);
             mPath.rQuadTo(x/2, -10,x, 0);
         }
-
-
         mPath.close();
-        mBitmapCanvas.drawPath(mPath, mPathPaint);
-        mBitmapCanvas.drawText(mText, textXPosition, textYPosition, mTextPaint);
-        canvas.drawBitmap(waveBitmap,0,0,null);
+        mBackCanvas.drawPath(mPath, mPathPaint);
+        mBackCanvas.drawText(mText, textXPosition, textYPosition, mAfterTextPaint);
 
-//        boolean b = false;
-//        if(mControlX > mWidth + mWidth / 4){
-//            b =true;
-//        }
-//
-//        if(mControlX < -mWidth / 4)
-//        {
-//            b = false;
-//        }
-//        mControlX = b ? mControlX -20 :mControlX+20;
+        mFrontCanvas.drawBitmap(mBackBitmap,0,0,mBitmapPaint);
+
+        canvas.drawBitmap(mFrontBitmap,0,0,null);
+
+
+
         if(mControlX<mWidth){
-            mControlX+=20;
+            mControlX+=15;
         }else {
             mControlX = 0;
         }
