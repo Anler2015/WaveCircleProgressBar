@@ -20,7 +20,7 @@ public class MainActivity extends Activity {
             i++;
             ib.setProgress(i);
             if(i<100){
-                handler.sendEmptyMessageDelayed(0,100);
+                handler.sendEmptyMessageDelayed(0,200);
             }
 
         }
@@ -28,9 +28,9 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.content_main);
         ib = (WaveCircleProgressBar)findViewById(R.id.ib);
-        ib.setProgress(50);
+        ib.setProgress(0);
         btn = (Button)findViewById(R.id.btn);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="WaveCircleProgressBar">
+        <attr name="after_text_color" format="color"/>
+        <attr name="before_text_color" format="color"/>
+        <attr name="wave_color" format="color"/>
+        <attr name="circle_color" format="color"/>
+        <attr name="outline_circle_unreached_color" format="color"/>
+        <attr name="outlint_circle_reached_color" format="color"/>
+        <attr name="circle_radius" format="dimension"/>
+        <attr name="text_size" format="dimension"/>
+        <attr name="wave_height" format="integer"/>
+        <attr name="wave_speed" format="integer"/>
+
+    </declare-styleable>
+
+
+</resources>
