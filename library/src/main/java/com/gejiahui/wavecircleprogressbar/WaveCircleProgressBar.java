@@ -16,15 +16,13 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.ProgressBar;
 
-import com.gejiahui.immersecircleprogressbar.R;
-
 /**
  * Created by gejiahui on 2015/12/15.
  */
 public class WaveCircleProgressBar extends ProgressBar {
     private final int default_reached_text_color = Color.rgb(0, 128, 255);
-    private final int default_unreached_text_color = Color.rgb(255,255,255);
-    private final int default_wave_color = Color.rgb(106, 185, 241);
+    private final int default_unreached_text_color = Color.rgb(204, 204, 204);
+    private final int default_wave_color = Color.rgb(126, 205, 241);
     private final int default_circle_color = Color.rgb(238,238,238);
     private final int default_outline_circle_unreached_color = Color.rgb(204, 204, 204);
     private final int default_outline_circle_reached_color = Color.rgb(0, 128, 255);
@@ -194,11 +192,11 @@ public class WaveCircleProgressBar extends ProgressBar {
                 defStyleAttr, 0);
         mWaveColor = attributes.getColor(R.styleable.WaveCircleProgressBar_wave_color,default_wave_color);
         mCircleColor = attributes.getColor(R.styleable.WaveCircleProgressBar_circle_color,default_circle_color);
-        mReachedTextColor = attributes.getColor(R.styleable.WaveCircleProgressBar_after_text_color,default_reached_text_color);
-        mUnreachedTextColor = attributes.getColor(R.styleable.WaveCircleProgressBar_before_text_color, default_unreached_text_color);
+        mReachedTextColor = attributes.getColor(R.styleable.WaveCircleProgressBar_reached_text_color,default_reached_text_color);
+        mUnreachedTextColor = attributes.getColor(R.styleable.WaveCircleProgressBar_unreached_text_color, default_unreached_text_color);
         mCircleRadius = attributes.getDimension(R.styleable.WaveCircleProgressBar_circle_radius, default_circle_radius);
         mTextSize = attributes.getDimension(R.styleable.WaveCircleProgressBar_text_size, default_text_size);
-        mOutlineCircleReachedColor = attributes.getColor(R.styleable.WaveCircleProgressBar_outlint_circle_reached_color, default_outline_circle_reached_color);
+        mOutlineCircleReachedColor = attributes.getColor(R.styleable.WaveCircleProgressBar_outline_circle_reached_color, default_outline_circle_reached_color);
         mOutlineCircleUnreachedColor = attributes.getColor(R.styleable.WaveCircleProgressBar_outline_circle_unreached_color, default_outline_circle_unreached_color);
         mWaveHeight = attributes.getInt(R.styleable.WaveCircleProgressBar_wave_height, default_wave_height);
         mWaveSpeed = attributes.getInt(R.styleable.WaveCircleProgressBar_wave_speed,default_wave_speed);
