@@ -28,7 +28,7 @@
         <com.gejiahui.wavecircleprogressbar.WaveCircleProgressBar
             android:id="@+id/ib7"
             android:layout_gravity="center"
-            style="@style/WaveCircleProgressBar_Crazy_Back"
+            style="@style/WaveCircleProgressBar_Crazy_Black"
             android:progress="50"
             />
 
@@ -98,9 +98,6 @@
             />
 
     </LinearLayout>
-
-
-
 
 
 
